@@ -1,0 +1,83 @@
+% Jordan Makansi
+% Sum_Squared_Distances
+
+% Parameters entered by the user:
+
+% Domain 
+X_max = 5;
+Y_max = 5;
+X_min = 0.0;
+Y_min = 0.0;
+
+% Location of sensor node 1
+x_1 = 2.0; 
+y_1 = 2.0; 
+
+% Location of sensor node 2
+x_2 = 3.0;
+y_2 = 2.0;
+
+
+%% Define Objective Function 
+
+a = 2;
+b = 2; 
+c = -2*x_1-2*x_2;
+d = -2*y_1-2*y_2;
+
+Q = 2*[a,0;0,b];
+R = [c, d];
+S = (x_1^2+x_2^2+y_1^2+y_2^2);  % multiplied by 1 because 2 terms of  each 
+
+%  [X,FVAL,EXITFLAG] = quadprog(H,f,A,b) 
+%   min 0.5*x'*H*x + f'*x   subject to:  A*x <= b
+
+%% Constraints:
+% J = 0.5*x'*Q*x+R'*x+S
+
+ 
+A = [-1, 0; 0, -1; 1, 0; 0, 1];
+b = [X_max; Y_max; X_min; Y_min];
+
+
+% A = [1, 0; 0, 1; -1, 0; 0, -1];
+% b = [-X_max; -Y_max; -X_min; -Y_min];
+
+
+%% Solve quadratically 
+
+H = Q;
+f = R;
+
+[X_quad,J_quad,exit_flag_quad] = quadprog(H,f,A,b);
+display('this is the minimizer, x:')
+display(X_quad)
+display('this is J_quad')
+display(J_quad)
+display('this is J_quad with S')
+display(J_quad+S)
+
+
+x_r1 = X_quad(1);
+y_r1 = X_quad(2);
+
+dist_1 = ((x_r1-x_1)^2+(y_r1-y_1)^2)^0.5;
+dist_2 = ((x_r1-x_2)^2+(y_r1-y_2)^2)^0.5;
+
+display('the distance to the first sensor node  is :')
+display(dist_1);
+display('the distance to the second sensor node is :')
+display(dist_2);
+
+
+
+
+
+
+
+
+
+
+
+
+
